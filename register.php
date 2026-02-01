@@ -1,102 +1,53 @@
 <?php
-require_once 'includes/config.php';
-require_once 'data/users.php';
-
-if (isLoggedIn()) {
-    header('Location: index.php');
-    exit;
-}
-
-$error = '';
-$success = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $confirmPassword = $_POST['confirm_password'] ?? '';
-    
-    if (empty($name) || empty($email) || empty($password)) {
-        $error = 'Tutti i campi sono obbligatori';
-    } elseif ($password !== $confirmPassword) {
-        $error = 'Le password non corrispondono';
-    } elseif (strlen($password) < 6) {
-        $error = 'La password deve essere di almeno 6 caratteri';
-    } else {
-        $user = registerUser($email, $password, $name);
-        if ($user) {
-            $success = 'Registrazione completata! Ora puoi effettuare il login.';
-        } else {
-            $error = 'Email già registrata';
-        }
-    }
-}
-
-$pageTitle = 'Registrazione';
-$paginaCSS = 'auth.css';
+require_once 'config/functions.php';
+$pageTitle = 'Registrati';
+$pageCSS = 'register.css';
 ?>
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <?php include 'includes/header.php'; ?>
-</head>
-<body>
-    <?php include 'includes/navbar.php'; ?>
+<?php include 'includes/header.php'; ?>
+<?php include 'includes/navbar.php'; ?>
 
-    <div class="auth-page">
-        <div class="auth-container">
-            <div class="auth-box">
-                <h1 class="auth-title">Registrati</h1>
-                <p class="auth-subtitle">Crea il tuo account BurgerQueen</p>
-
-                <?php if ($error): ?>
-                <div class="alert-error">
-                    <?php echo htmlspecialchars($error); ?>
-                </div>
-                <?php endif; ?>
-
-                <?php if ($success): ?>
-                <div class="alert-success">
-                    <?php echo htmlspecialchars($success); ?>
-                    <a href="login.php">Vai al Login</a>
-                </div>
-                <?php endif; ?>
-
-                <form method="POST" class="auth-form">
-                    <div class="form-group">
-                        <label for="name">Nome Completo</label>
-                        <input type="text" id="name" name="name" required class="form-input" 
-                               placeholder="Il tuo nome" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="register-box">
+                    <span class="emoji">🍔</span>
+                    <h2>Registrati</h2>
+                    <p>Unisciti alla famiglia RoyalBites!</p>
+                    
+                    <?php if (isset($_GET['error'])): ?>
+                    <div class="alert">
+                        Errore nella registrazione. Verifica i dati e riprova.
                     </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required class="form-input" 
-                               placeholder="tua-email@esempio.com" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                    <?php endif; ?>
+                    
+                    <form action="/config/functions.php?action=register" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm" class="form-label">Conferma Password</label>
+                            <input type="password" class="form-control" id="confirm" name="confirm" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrati</button>
+                    </form>
+                    
+                    <div class="register-footer">
+                        Hai già un account? <a href="/login.php">Accedi</a>
                     </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required class="form-input"
-                               placeholder="Minimo 6 caratteri">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirm_password">Conferma Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" required class="form-input"
-                               placeholder="Ripeti la password">
-                    </div>
-
-                    <button type="submit" class="btn-primary btn-full">Registrati</button>
-                </form>
-
-                <div class="auth-footer">
-                    <p>Hai già un account? <a href="login.php">Accedi qui</a></p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <?php include 'includes/footer.php'; ?>
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>

@@ -1,286 +1,172 @@
-.cart-page {
-    min-height: calc(100vh - 200px);
-    padding: 2rem 0;
+/* RoyalBites - Cart Page Styles */
+
+.cart-header {
+    text-align: center;
+    padding: 3rem 0 2rem;
 }
 
+.cart-header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cart-header .emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+/* Empty Cart */
 .empty-cart {
     text-align: center;
     padding: 4rem 2rem;
 }
 
-.empty-cart-icon {
-    font-size: 6rem;
+.empty-cart .emoji {
+    font-size: 5rem;
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
 .empty-cart h2 {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
+    font-size: 2rem;
     margin-bottom: 1rem;
+    color: #ccc;
 }
 
 .empty-cart p {
-    color: rgba(255, 255, 255, 0.7);
+    color: #999;
     margin-bottom: 2rem;
 }
 
-.cart-form {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.cart-items {
+/* Cart List */
+.cart-list {
     margin-bottom: 2rem;
 }
 
 .cart-item {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--dark-2);
     border-radius: 15px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    display: grid;
-    grid-template-columns: 120px 1fr auto auto auto;
-    gap: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+    gap: 1rem;
     transition: all 0.3s ease;
 }
 
 .cart-item:hover {
-    border-color: var(--primary);
-    box-shadow: 0 5px 20px rgba(255, 23, 68, 0.2);
+    background: var(--dark-3);
 }
 
-.cart-item-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.cart-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.cart-item-details {
+.cart-item-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     flex: 1;
 }
 
-.cart-item-name {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
+.cart-item .emoji {
+    font-size: 2.5rem;
 }
 
-.cart-item-description {
-    color: rgba(255, 255, 255, 0.7);
+.cart-item-details h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+    color: var(--light);
+}
+
+.cart-item-details p {
+    color: #ccc;
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    margin: 0;
 }
 
 .cart-item-price {
-    color: var(--secondary);
+    font-size: 1.3rem;
     font-weight: bold;
-    font-size: 1.1rem;
-}
-
-.cart-item-quantity label {
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.quantity-input-cart {
-    width: 80px;
-    padding: 0.5rem;
-    border: 2px solid var(--primary);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--light);
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.cart-item-subtotal {
+    color: var(--primary);
+    min-width: 100px;
     text-align: right;
 }
 
-.subtotal-label {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 0.3rem;
-}
-
-.subtotal-amount {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: var(--secondary);
-}
-
-.cart-item-remove {
-    text-align: center;
-}
-
-.btn-remove {
-    background: rgba(255, 23, 68, 0.2);
-    border: none;
-    color: var(--primary);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-.btn-remove:hover {
-    background: var(--primary);
-    color: var(--light);
-    transform: scale(1.1);
-}
-
-.cart-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.cart-summary {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 2rem;
-    border: 2px solid var(--primary);
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.cart-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    padding: 1rem 0;
-    border-bottom: 2px solid var(--primary);
-}
-
-.total-label {
-    color: var(--light);
-}
-
-.total-amount {
-    color: var(--secondary);
-}
-
-.btn-checkout {
-    width: 100%;
-    background: var(--bg-gradient);
-    border: none;
-    color: var(--light);
-    padding: 1.2rem;
-    border-radius: 25px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
-.btn-checkout:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 25px rgba(255, 23, 68, 0.6);
-}
-
-.login-prompt {
-    text-align: center;
-}
-
-.login-prompt p {
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.login-benefits {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.benefit-card {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 23, 68, 0.15));
-    border: 2px solid var(--secondary);
-    border-radius: 15px;
-    padding: 1.5rem;
+.cart-item-actions {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.benefit-icon {
-    font-size: 3rem;
+.quantity-display {
+    background: var(--dark-3);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    min-width: 80px;
+    text-align: center;
 }
 
-.benefit-text {
-    flex: 1;
+/* Cart Summary */
+.cart-summary {
+    background: var(--dark-2);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-top: 2rem;
 }
 
-.benefit-text strong {
-    display: block;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: var(--secondary);
+.cart-summary h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
 }
 
-.benefit-text p {
-    margin: 0 0 1rem 0;
-    color: rgba(255, 255, 255, 0.8);
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--dark-3);
 }
 
-.btn-login-small {
-    background: var(--bg-gradient);
-    color: var(--light);
-    padding: 0.6rem 1.2rem;
-    border-radius: 20px;
+.summary-row:last-child {
+    border-bottom: none;
+    padding-top: 1.5rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
 }
 
-.btn-login-small:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(255, 23, 68, 0.6);
+.summary-label {
+    color: #ccc;
 }
 
+.summary-value {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.cart-summary .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .cart-item {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .cart-item-image {
-        margin: 0 auto;
-    }
-    
-    .cart-item-subtotal {
-        text-align: center;
-    }
-    
-    .benefit-card {
         flex-direction: column;
+        text-align: center;
+    }
+    
+    .cart-item-info {
+        flex-direction: column;
+    }
+    
+    .cart-item-price {
         text-align: center;
     }
 }
