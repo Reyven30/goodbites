@@ -1,17 +1,17 @@
 <?php
 /**
- * Login - User login page
+ * Login - Pagina di accesso utente
  */
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 
-// Redirect if already logged in
+// Reindirizza se già loggato
 if (isLoggedIn()) { header('Location: index.php'); exit; }
 
 $err = '';
 
-// Handle login
+// Gestione login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $pwd = $_POST['pwd'] ?? '';

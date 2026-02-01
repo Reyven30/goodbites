@@ -1,13 +1,13 @@
 <?php
 /**
- * Index - Menu page with products
+ * Index - Pagina menu con prodotti
  */
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 require_once 'data/products.php';
 
-// Handle add to cart
+// Gestione aggiunta al carrello
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $id = (int)$_POST['product_id'];
     $qty = (int)$_POST['qty'];

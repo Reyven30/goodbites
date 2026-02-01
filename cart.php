@@ -1,13 +1,13 @@
 <?php
 /**
- * Cart - Shopping cart page
+ * Carrello - Pagina carrello acquisti
  */
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 require_once 'data/products.php';
 
-// Handle cart actions
+// Gestione azioni carrello
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update'])) {
         foreach ($_POST['qty'] as $id => $qty) updateCart($id, (int)$qty);
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         clearCart();
         $msg = "Carrello svuotato!";
     } elseif (isset($_POST['confirm']) && isLoggedIn()) {
-        // Save order data
+        // Salva dati ordine
         $_SESSION['order'] = [
             'name' => $_SESSION['user_name'],
             'email' => $_SESSION['user_email'],
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'number' => 'GB-' . date('Ymd') . '-' . rand(1000, 9999),
             'date' => date('d/m/Y H:i')
         ];
-        // Send confirmation email
+        // Invia email di conferma
         sendOrderEmail($_SESSION['order']);
         clearCart();
         header('Location: order-confirmed.php');
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Send order confirmation email
+// Invia email conferma ordine
 function sendOrderEmail($order) {
     $list = "";
     foreach ($order['items'] as $item) {

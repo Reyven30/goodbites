@@ -1,12 +1,12 @@
 <?php
 /**
- * Order Confirmed - Order confirmation page
+ * Ordine Confermato - Pagina conferma ordine
  */
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 
-// Redirect if no order
+// Reindirizza se non c'è ordine
 if (!isset($_SESSION['order'])) { header('Location: index.php'); exit; }
 
 $order = $_SESSION['order'];

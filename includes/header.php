@@ -1,4 +1,4 @@
-<!-- Header - Meta tags and CSS -->
+<!-- Header - Meta tag e CSS -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= isset($pageTitle) ? $pageTitle . ' - ' : '' ?>GoodBites</title>

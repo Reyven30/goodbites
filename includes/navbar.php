@@ -1,5 +1,5 @@
 <?php
-// Navbar - Navigation bar
+// Navbar - Barra di navigazione
 $cartCount = getCartCount();
 $page = basename($_SERVER['PHP_SELF']);
 ?>

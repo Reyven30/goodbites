@@ -1,19 +1,19 @@
 <?php
 /**
- * Register - User registration page
+ * Registrazione - Pagina di registrazione utente
  */
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 require_once 'data/users.php';
 
-// Redirect if already logged in
+// Reindirizza se già loggato
 if (isLoggedIn()) { header('Location: index.php'); exit; }
 
 $err = '';
 $ok = '';
 
-// Handle registration
+// Gestione registrazione
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (getUserByEmail($email)) {
         $err = 'Email già registrata';
     } else {
-        // In a real app, save to database here
+        // In un'app reale, salvare nel database qui
         $ok = 'Registrazione completata! Ora puoi effettuare il login.';
     }
 }
