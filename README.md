@@ -1,4 +1,4 @@
-# BurgerQueen - E-commerce con Sistema Ibrido di Login
+# GoodBites - E-commerce con Sistema Ibrido di Login
 
 Sito e-commerce per fast food con **sistema ibrido**: ordina come ospite o registrati per vantaggi esclusivi.
 

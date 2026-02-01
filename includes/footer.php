@@ -1,5 +1,6 @@
+<!-- Footer -->
 <footer class="site-footer">
     <div class="footer-content">
-        <p>&copy; 2026 BurgerQueen. Tutti i diritti riservati.</p>
+        <p>Made By Reyven Flores</p>
     </div>
 </footer>

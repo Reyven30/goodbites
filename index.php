@@ -1,20 +1,24 @@
 <?php
-require_once 'includes/config.php';
+/**
+ * Index - Menu page with products
+ */
+session_start();
+require_once 'includes/auth_functions.php';
+require_once 'includes/cart_functions.php';
 require_once 'data/products.php';
 
 // Handle add to cart
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-    $productId = (int)$_POST['product_id'];
-    $quantity = (int)$_POST['quantity'];
-    
-    if ($quantity > 0) {
-        addToCart($productId, $quantity);
-        $successMessage = "Prodotto aggiunto al carrello!";
+    $id = (int)$_POST['product_id'];
+    $qty = (int)$_POST['qty'];
+    if ($qty > 0) {
+        addToCart($id, $qty);
+        $msg = "Prodotto aggiunto al carrello!";
     }
 }
 
 $pageTitle = 'Menu';
-$paginaCSS = 'index.css';
+$pageCss = 'index.css';
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -24,28 +28,33 @@ $paginaCSS = 'index.css';
 <body>
     <?php include 'includes/navbar.php'; ?>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title">Royal Menu</h1>
-            <p class="hero-subtitle">Scegli i tuoi preferiti e ordina come una regina</p>
+            <h1 class="hero-title">Il Nostro Menu</h1>
+            <p class="hero-subtitle">Scopri i sapori che fanno la differenza</p>
         </div>
     </section>
 
-    <?php if (isset($successMessage)): ?>
-    <div class="alert-success">
-        <?php echo $successMessage; ?>
-    </div>
+    <?php if (isset($msg)): ?>
+    <div class="alert-success"><?= $msg ?></div>
     <?php endif; ?>
 
-    <?php if (!isLoggedIn()): ?>
+    <!-- Welcome/Login banner -->
+    <?php if (isLoggedIn()): ?>
+    <div class="welcome-banner">
+        <div class="container">
+            <p>👑 Benvenuto, <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>!</p>
+        </div>
+    </div>
+    <?php else: ?>
     <div class="benefits-banner">
         <div class="container">
             <div class="benefits-content">
-                <div class="benefits-icon">🎁</div>
+                <span class="benefits-icon">🎁</span>
                 <div class="benefits-text">
-                    <h3>Registrati e ottieni il 10% di sconto sul primo ordine!</h3>
-                    <p>Più punti fedeltà, ordini salvati e checkout veloce</p>
+                    <h3>Registrati e ottieni il 10% di sconto!</h3>
+                    <p>Accedi per ordinare</p>
                 </div>
                 <div class="benefits-actions">
                     <a href="register.php" class="btn-register-banner">Registrati</a>
@@ -54,73 +63,53 @@ $paginaCSS = 'index.css';
             </div>
         </div>
     </div>
-    <?php else: ?>
-    <div class="welcome-banner">
-        <div class="container">
-            <p>👑 Benvenuto, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong>! Ogni ordine ti fa guadagnare punti fedeltà.</p>
-        </div>
-    </div>
     <?php endif; ?>
 
     <!-- Category Filter -->
     <section class="category-section">
         <div class="container">
             <div class="category-filter">
-                <a href="index.php" class="category-btn <?php echo !isset($_GET['category']) ? 'active' : ''; ?>">
+                <a href="index.php" class="category-btn <?= !isset($_GET['cat']) ? 'active' : '' ?>">
                     <span class="category-icon">👑</span>
                     <span>Tutto</span>
                 </a>
-                <?php foreach ($categories as $key => $category): ?>
-                <a href="index.php?category=<?php echo $key; ?>" class="category-btn <?php echo (isset($_GET['category']) && $_GET['category'] == $key) ? 'active' : ''; ?>">
-                    <span class="category-icon"><?php echo $category['icon']; ?></span>
-                    <span><?php echo $category['name']; ?></span>
+                <?php foreach ($categories as $key => $cat): ?>
+                <a href="index.php?cat=<?= $key ?>" class="category-btn <?= (($_GET['cat'] ?? '') == $key) ? 'active' : '' ?>">
+                    <span class="category-icon"><?= $cat['icon'] ?></span>
+                    <span><?= $cat['name'] ?></span>
                 </a>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
+    <!-- Products -->
     <section class="products-section">
         <div class="container">
             <div class="products-grid">
                 <?php 
-                $allProducts = getAllProducts();
-                $filterCategory = isset($_GET['category']) ? $_GET['category'] : null;
-                
-                foreach ($allProducts as $product): 
-                    if ($filterCategory && $product['category'] != $filterCategory) {
-                        continue;
-                    }
+                $filter = $_GET['cat'] ?? null;
+                foreach (getAllProducts() as $p): 
+                    if ($filter && $p['cat'] != $filter) continue;
                 ?>
                 <div class="product-card">
                     <div class="product-image-wrapper">
-                        <img src="<?php echo $product['image']; ?>" 
-                             alt="<?php echo htmlspecialchars($product['name']); ?>" 
-                             class="product-image"
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect fill=\'%23FF1744\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'80\' text-anchor=\'middle\' dy=\'.3em\' fill=\'white\' font-family=\'Arial\'%3E<?php echo $categories[$product['category']]['icon']; ?>%3C/text%3E%3C/svg%3E'">
+                        <img src="<?= $p['img'] ?>" alt="<?= htmlspecialchars($p['name']) ?>" class="product-image"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect fill=\'%23FF1744\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'80\' text-anchor=\'middle\' dy=\'.3em\' fill=\'white\'%3E<?= $categories[$p['cat']]['icon'] ?>%3C/text%3E%3C/svg%3E'">
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
-                        <p class="product-description"><?php echo htmlspecialchars($product['description']); ?></p>
-                        <div class="product-price">€<?php echo number_format($product['price'], 2, ',', '.'); ?></div>
+                        <h3 class="product-name"><?= htmlspecialchars($p['name']) ?></h3>
+                        <p class="product-description"><?= htmlspecialchars($p['desc']) ?></p>
+                        <div class="product-price">€<?= number_format($p['price'], 2, ',', '.') ?></div>
                         
                         <form method="POST" class="product-form">
-                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
                             <div class="product-controls">
                                 <div class="quantity-control">
-                                    <label for="qty-<?php echo $product['id']; ?>">Quantità:</label>
-                                    <input type="number" 
-                                           id="qty-<?php echo $product['id']; ?>"
-                                           name="quantity" 
-                                           value="1" 
-                                           min="1" 
-                                           max="99" 
-                                           class="quantity-input">
+                                    <label for="qty-<?= $p['id'] ?>">Qtà:</label>
+                                    <input type="number" id="qty-<?= $p['id'] ?>" name="qty" value="1" min="1" max="99" class="quantity-input">
                                 </div>
-                                <button type="submit" name="add_to_cart" class="add-to-cart-btn">
-                                    Aggiungi al carrello
-                                </button>
+                                <button type="submit" name="add_to_cart" class="add-to-cart-btn">Aggiungi</button>
                             </div>
                         </form>
                     </div>

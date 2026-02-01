@@ -1,49 +1,18 @@
 <?php
-// User data (in produzione usare un database)
+/**
+ * Dati Utenti - Utenti demo (in produzione usare database)
+ */
 $users = [
-    [
-        'id' => 1,
-        'email' => 'admin@burgerqueen.com',
-        'password' => password_hash('admin123', PASSWORD_DEFAULT),
-        'name' => 'Admin',
-        'role' => 'admin'
-    ],
-    [
-        'id' => 2,
-        'email' => 'user@test.com',
-        'password' => password_hash('user123', PASSWORD_DEFAULT),
-        'name' => 'Test User',
-        'role' => 'user'
-    ]
+    ['id' => 1, 'email' => 'admin@goodbites.com', 'password' => 'admin123', 'name' => 'Admin'],
+    ['id' => 2, 'email' => 'user@test.com', 'password' => 'user123', 'name' => 'Test User']
 ];
 
+// Cerca utente per email
 function getUserByEmail($email) {
     global $users;
-    foreach ($users as $user) {
-        if ($user['email'] === $email) {
-            return $user;
-        }
+    foreach ($users as $u) {
+        if ($u['email'] === $email) return $u;
     }
     return null;
-}
-
-function registerUser($email, $password, $name) {
-    global $users;
-    
-    // Check if user already exists
-    if (getUserByEmail($email)) {
-        return false;
-    }
-    
-    $newUser = [
-        'id' => count($users) + 1,
-        'email' => $email,
-        'password' => password_hash($password, PASSWORD_DEFAULT),
-        'name' => $name,
-        'role' => 'user'
-    ];
-    
-    $users[] = $newUser;
-    return $newUser;
 }
 ?>
