@@ -1,6 +1,6 @@
 <?php
 /**
- * Products Data - Menu items
+ * Dati Prodotti - Menu del ristorante
  */
 $products = [
     ['id' => 1, 'name' => 'Queen Burger', 'desc' => 'Doppio hamburger di manzo, formaggio cheddar, bacon, lattuga e salsa speciale', 'cat' => 'burgers', 'price' => 12.90, 'img' => 'assets/images/queen-burger.jpg'],
@@ -11,7 +11,7 @@ $products = [
     ['id' => 6, 'name' => 'Brownie Delight', 'desc' => 'Brownie al cioccolato caldo con gelato alla vaniglia', 'cat' => 'desserts', 'price' => 7.50, 'img' => 'assets/images/brownie.jpg']
 ];
 
-// Categories with icons
+// Categorie con icone
 $categories = [
     'burgers' => ['name' => 'Burgers', 'icon' => '🍔'],
     'sides' => ['name' => 'Contorni', 'icon' => '🍟'],

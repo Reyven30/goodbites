@@ -1,6 +1,6 @@
-/* Stili specifici pagina index */
+/* Index page specific styles */
 
-/* Animazioni aggiuntive per le card prodotti */
+/* Additional animations for product cards */
 @keyframes fadeInUp {
     from {
         opacity: 0;

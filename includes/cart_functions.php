@@ -1,33 +1,33 @@
 <?php
 /**
- * Cart Functions - Shopping cart management
+ * Funzioni Carrello - Gestione carrello acquisti
  */
 
-// Init cart if not exists
+// Inizializza carrello se non esiste
 function initCart() {
     if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 }
 
-// Add product to cart
+// Aggiungi prodotto al carrello
 function addToCart($id, $qty = 1) {
     initCart();
     $_SESSION['cart'][$id] = ($_SESSION['cart'][$id] ?? 0) + $qty;
 }
 
-// Update product quantity
+// Aggiorna quantità prodotto
 function updateCart($id, $qty) {
     initCart();
     if ($qty <= 0) unset($_SESSION['cart'][$id]);
     else $_SESSION['cart'][$id] = $qty;
 }
 
-// Remove product from cart
+// Rimuovi prodotto dal carrello
 function removeFromCart($id) {
     initCart();
     unset($_SESSION['cart'][$id]);
 }
 
-// Get cart items with product details
+// Ottieni prodotti nel carrello con dettagli
 function getCartItems() {
     initCart();
     require_once 'data/products.php';
@@ -46,20 +46,20 @@ function getCartItems() {
     return $items;
 }
 
-// Get cart total price
+// Calcola totale carrello
 function getCartTotal() {
     $total = 0;
     foreach (getCartItems() as $item) $total += $item['subtotal'];
     return $total;
 }
 
-// Get total items count
+// Conta prodotti nel carrello
 function getCartCount() {
     initCart();
     return array_sum($_SESSION['cart']);
 }
 
-// Clear cart
+// Svuota carrello
 function clearCart() {
     $_SESSION['cart'] = [];
 }

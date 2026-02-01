@@ -1,19 +1,19 @@
 <?php
 /**
- * Auth Functions - User authentication
+ * Funzioni Autenticazione - Gestione login utenti
  */
+require_once __DIR__ . '/../data/users.php';
 
-// Check if user is logged in
+// Verifica se l'utente è loggato
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
 }
 
-// Login user with email and password
+// Login utente con email e password
 function login($email, $pwd) {
-    require_once 'data/users.php';
     $user = getUserByEmail($email);
     
-    // Simple password check
+    // Controllo password semplice
     if ($user && $user['password'] === $pwd) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
@@ -23,7 +23,7 @@ function login($email, $pwd) {
     return false;
 }
 
-// Logout user
+// Logout utente
 function logout() {
     session_unset();
     session_destroy();
