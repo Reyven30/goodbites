@@ -1,19 +1,19 @@
 <?php
 /**
- * Funzioni Autenticazione - Gestione login utenti
+ * Auth Functions - User authentication
  */
 
-// Controlla se l'utente è loggato
+// Check if user is logged in
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
 }
 
-// Effettua il login con email e password
+// Login user with email and password
 function login($email, $pwd) {
     require_once 'data/users.php';
     $user = getUserByEmail($email);
     
-    // Controllo password
+    // Simple password check
     if ($user && $user['password'] === $pwd) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
@@ -23,7 +23,7 @@ function login($email, $pwd) {
     return false;
 }
 
-// Effettua il logout
+// Logout user
 function logout() {
     session_unset();
     session_destroy();

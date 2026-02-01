@@ -30,13 +30,24 @@ body {
     padding: 0 2rem;
 }
 
-/* Navbar */
+/* Barra di navigazione */
 .navbar {
     background: rgba(26, 26, 26, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 3px solid var(--primary);
     box-shadow: 0 4px 20px rgba(255, 23, 68, 0.3);
     padding: 1rem 2rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar.nav-hidden {
+    transform: translateY(-100%);
+}
+
+.navbar .container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .navbar-brand {
@@ -48,10 +59,75 @@ body {
     background-clip: text;
     letter-spacing: 2px;
     text-decoration: none;
+    flex-shrink: 0;
+}
+
+/* Hamburger menu */
+.navbar-toggler {
+    border: 2px solid var(--primary);
+    padding: 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(255, 23, 68, 0.3);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FF1744' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Navbar collapse - Desktop */
+@media (min-width: 992px) {
+    .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+        justify-content: flex-end;
+    }
+    
+    .navbar-nav {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+    }
+}
+
+/* Navbar collapse - Mobile */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(26, 26, 26, 0.98);
+        border-bottom: 3px solid var(--primary);
+        padding: 1rem;
+    }
+    
+    .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .nav-item {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 0.75rem 1rem;
+    }
+    
+    .cart-icon-link {
+        margin-top: 1rem;
+    }
 }
 
 .navbar-nav {
-    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-link {
