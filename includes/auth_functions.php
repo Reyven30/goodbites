@@ -2,7 +2,7 @@
 /**
  * Funzioni Autenticazione - Gestione login utenti
  */
-require_once __DIR__ . '/../data/users.php';
+require_once 'data/db.php';
 
 // Verifica se l'utente è loggato
 function isLoggedIn() {

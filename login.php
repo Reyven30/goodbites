@@ -5,6 +5,7 @@
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
+require_once 'data/db.php';
 
 // Reindirizza se già loggato
 if (isLoggedIn()) { header('Location: index.php'); exit; }
