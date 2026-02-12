@@ -6,7 +6,7 @@ $users = [
     [
         'id' => 1, 
         'email' => 'admin@goodbites.com', 
-        'password' => password_hash('adminpass', PASSWORD_DEFAULT) 
+        'password' => password_hash('adminpass', PASSWORD_DEFAULT), 
         'name' => 'Admin'
         ],
     [
