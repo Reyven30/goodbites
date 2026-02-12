@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $err = 'Email o password non validi';
 }
 
+
+
 $pageTitle = 'Login';
 $pageCss = 'auth.css';
 ?>

@@ -30,7 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $err = 'Email già registrata';
     } else {
         // In un'app reale, salvare nel database qui
-        $ok = 'Registrazione completata! Ora puoi effettuare il login.';
+        $passwordHash = password_hash($pwd, PASSWORD_DEFAULT);
+        
+        // Uso i prepared statement per aumentare la sicurezza
+        $sql = "INSERT INTO users (name,email,password) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $name, $email, $passwordHash); // sss = string, string, string
+        $stmt->execute();
+        if($stmt->execute()){
+            $ok = 'Registrazione Completata! Ora puoi effettuare il login.';
+        }
+            else {
+                $err = 'Errore durante la registrazione: ' . $stmt->error;
+            }
     }
 }
 

@@ -3,6 +3,7 @@
  * Funzioni Autenticazione - Gestione login utenti
  */
 require_once 'data/db.php';
+require_once 'data/users.php';  
 
 // Verifica se l'utente è loggato
 function isLoggedIn() {
@@ -14,7 +15,7 @@ function login($email, $pwd) {
     $user = getUserByEmail($email);
     
     // Controllo password semplice
-    if ($user && $user['password'] === $pwd) {
+    if ($user && password_verify($pwd, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_name'] = $user['name'];
