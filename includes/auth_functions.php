@@ -2,8 +2,7 @@
 /**
  * Funzioni Autenticazione - Gestione login utenti
  */
-require_once 'data/db.php';
-require_once 'data/users.php';  
+require_once __DIR__ . '/../data/users.php';
 
 // Verifica se l'utente è loggato
 function isLoggedIn() {
@@ -30,3 +29,4 @@ function logout() {
     session_destroy();
 }
 ?>
+
