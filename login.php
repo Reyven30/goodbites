@@ -61,7 +61,7 @@ $pageCss = 'auth.css';
                 </form>
 
                 <div class="demo-credentials">
-                    <p><strong>Test:</strong> user@test.com / user123</p>
+                    <p><strong>Test:</strong> user@goodbites.com / userpass</p>
                 </div>
 
                 <div class="auth-footer">
