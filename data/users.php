@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/db.php';
 
 // Trova utente per email
 function getUserByEmail($email) {
