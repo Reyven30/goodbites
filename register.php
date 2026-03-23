@@ -5,23 +5,27 @@
 session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
-require_once 'data/db.php';
 
 // Reindirizza se già loggato
-if (isLoggedIn()) { header('Location: index.php'); exit; }
+if (isLoggedIn()) { 
+    header('Location: index.php'); 
+    exit; 
+}
 
 $err = '';
 $ok = '';
 
 // Gestione registrazione
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
+    $name  = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $pwd = $_POST['pwd'] ?? '';
-    $pwd2 = $_POST['pwd2'] ?? '';
-    
+    $pwd   = $_POST['pwd'] ?? '';
+    $pwd2  = $_POST['pwd2'] ?? '';
+
     if (empty($name) || empty($email) || empty($pwd)) {
         $err = 'Tutti i campi sono obbligatori';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $err = 'Email non valida';
     } elseif ($pwd !== $pwd2) {
         $err = 'Le password non corrispondono';
     } elseif (strlen($pwd) < 6) {
@@ -29,20 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (getUserByEmail($email)) {
         $err = 'Email già registrata';
     } else {
-        // In un'app reale, salvare nel database qui
-        $passwordHash = password_hash($pwd, PASSWORD_DEFAULT);
-        
-        // Uso i prepared statement per aumentare la sicurezza
-        $sql = "INSERT INTO users (name,email,password) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $name, $email, $passwordHash); // sss = string, string, string
-        $stmt->execute();
-        if($stmt->execute()){
-            $ok = 'Registrazione Completata! Ora puoi effettuare il login.';
+        $hash = password_hash($pwd, PASSWORD_DEFAULT);
+
+        if (createUser($name, $email, $hash)) {
+            $ok = 'Registrazione completata! Ora puoi effettuare il login.';
+        } else {
+            $err = 'Errore durante la registrazione. Riprova.';
         }
-            else {
-                $err = 'Errore durante la registrazione: ' . $stmt->error;
-            }
     }
 }
 
@@ -74,12 +71,12 @@ $pageCss = 'auth.css';
                 <form method="POST" class="auth-form">
                     <div class="form-group">
                         <label for="name">Nome</label>
-                        <input type="text" id="name" name="name" required class="form-input" 
+                        <input type="text" id="name" name="name" required class="form-input"
                                placeholder="Il tuo nome" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required class="form-input" 
+                        <input type="email" id="email" name="email" required class="form-input"
                                placeholder="tua-email@esempio.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
                     </div>
                     <div class="form-group">
@@ -100,8 +97,6 @@ $pageCss = 'auth.css';
         </div>
     </div>
 
-    <?php include 'includes/footer.php'; 
-    $conn->close();
-    ?>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
