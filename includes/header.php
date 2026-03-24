@@ -8,3 +8,4 @@
 <?php if (isset($pageCss)): ?>
 <link href="assets/mycss/<?= $pageCss ?>" rel="stylesheet">
 <?php endif; ?>
+<script src="assets/bootstrap/js/bootstrap.bundle.min.js" defer></script>
