@@ -1,6 +1,6 @@
 <?php
-//$conn = new mysqli("localhost", "flores", "vWy7Xr7kvdpp", "my_flores");
-$conn = new mysqli("localhost", "root", "", "goodbites");
+$conn = new mysqli("localhost", "flores", "vWy7Xr7kvdpp", "my_flores");
+//conn = new mysqli("localhost", "root", "", "goodbites");
 
 
 
