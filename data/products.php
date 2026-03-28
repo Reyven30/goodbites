@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/db.php';
 
-// Get product by ID
+// Prendo un prodotto per id, ritorna null se non trovato
 function getProductById($id) {
     global $conn;
 
@@ -18,7 +18,7 @@ function getProductById($id) {
     return $res->fetch_assoc() ?: null;
 }
 
-// Get all products
+// Prendo tutti i prodotti, ritorna array vuoto se non ci sono
 function getAllProducts() {
     global $conn;
 
@@ -32,7 +32,7 @@ function getAllProducts() {
     return $products;
 }
 
-// Get categories
+// Prendo le categorie, ritorna array vuoto se non ci sono
 function getCategories() {
     global $conn;
 

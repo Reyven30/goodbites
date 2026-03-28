@@ -1,6 +1,4 @@
-/* Index page specific styles */
-
-/* Additional animations for product cards */
+/* Animazioni di ingresso delle card */
 @keyframes fadeInUp {
     from {
         opacity: 0;

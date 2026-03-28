@@ -11,53 +11,58 @@ require_once 'data/orders.php';
 // Gestione azioni carrello
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update'])) {
-        foreach ($_POST['qty'] as $id => $qty) updateCart($id, (int)$qty);
+        foreach ($_POST['qty'] as $id => $qty) {
+            updateCart($id, (int)$qty);
+        }
         $msg = "Carrello aggiornato!";
+
     } elseif (isset($_POST['remove'])) {
-        removeFromCart((int)$_POST['id']);
+        removeFromCart((int)$_POST['remove']);
         $msg = "Prodotto rimosso!";
     } elseif (isset($_POST['clear'])) {
         clearCart();
         $msg = "Carrello svuotato!";
-    } } elseif (isset($_POST['confirm']) && isLoggedIn()) {
-    $items = getCartItems();
-    $total = getCartTotal();
 
-    if (empty($items) || $total <= 0) {
-        $msg = "Carrello vuoto o totale non valido.";
-    } else {
-        // Adatta struttura carrello al formato richiesto da createOrder()
-        $cartItemsForDb = [];
-        foreach ($items as $item) {
-            $p = $item['product'];
-            $cartItemsForDb[] = [
-                'id' => (int)$p['id'],
-                'name' => $p['name'],
-                'price' => (float)$p['price'],
-                'qty' => (int)$item['qty']
-            ];
-        }
+    } elseif (isset($_POST['confirm']) && isLoggedIn()) {
+        $items = getCartItems();
+        $total = getCartTotal();
 
-        $orderId = createOrder((int)$_SESSION['user_id'], $cartItemsForDb, (float)$total);
-
-        if ($orderId) {
-            // Manteniamo session order solo per la pagina di conferma/email
-            $_SESSION['order'] = [
-                'id' => $orderId,
-                'name' => $_SESSION['user_name'],
-                'email' => $_SESSION['user_email'],
-                'items' => $items,
-                'total' => $total,
-                'number' => 'GB-' . str_pad($orderId, 6, '0', STR_PAD_LEFT),
-                'date' => date('d/m/Y H:i')
-            ];
-
-            sendOrderEmail($_SESSION['order']);
-            clearCart();
-            header('Location: order-confirmed.php');
-            exit;
+        if (empty($items) || $total <= 0) {
+            $msg = "Carrello vuoto o totale non valido.";
         } else {
-            $msg = "Errore durante il salvataggio ordine nel database.";
+            // Converte struttura carrello per createOrder()
+            $cartItemsForDb = [];
+            foreach ($items as $item) {
+                $p = $item['product'];
+                $cartItemsForDb[] = [
+                    'id' => (int)$p['id'],
+                    'name' => $p['name'],
+                    'price' => (float)$p['price'],
+                    'qty' => (int)$item['qty']
+                ];
+            }
+
+            $userId = (int)($_SESSION['user_id'] ?? 0);
+            $orderId = createOrder($userId, $cartItemsForDb, (float)$total);
+
+            if ($orderId) {
+                $_SESSION['order'] = [
+                    'id' => $orderId,
+                    'name' => $_SESSION['user_name'] ?? '',
+                    'email' => $_SESSION['user_email'] ?? '',
+                    'items' => $items,
+                    'total' => $total,
+                    'number' => 'GB-' . str_pad((string)$orderId, 6, '0', STR_PAD_LEFT),
+                    'date' => date('d/m/Y H:i')
+                ];
+
+                sendOrderEmail($_SESSION['order']);
+                clearCart();
+                header('Location: order-confirmed.php');
+                exit;
+            } else {
+                $msg = "Errore durante il salvataggio ordine nel database.";
+            }
         }
     }
 }
@@ -103,7 +108,7 @@ $pageCss = 'cart.css';
             <?php endif; ?>
 
             <?php if (empty($items)): ?>
-                <!-- Empty cart -->
+                <!-- Cart Vuoto -->
                 <div class="empty-cart">
                     <div class="empty-cart-icon">🛒</div>
                     <h2>Il tuo carrello è vuoto</h2>
@@ -111,17 +116,16 @@ $pageCss = 'cart.css';
                     <a href="index.php" class="btn-primary">Vai al Menu</a>
                 </div>
             <?php else: ?>
-                <!-- Cart form -->
+                <!-- Cart Form -->
                 <form method="POST" class="cart-form">
                     <input type="hidden" name="id" value="">
                     
                     <div class="cart-items">
                         <?php foreach ($items as $item): $p = $item['product']; ?>
                         <div class="cart-item">
-                            <div class="cart-item-image">
-                                <img src="<?= $p['img'] ?>" alt="<?= htmlspecialchars($p['name']) ?>"
-                                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'%3E%3Crect fill=\'%23FF1744\' width=\'150\' height=\'150\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'40\' text-anchor=\'middle\' dy=\'.3em\' fill=\'white\'%3E🍔%3C/text%3E%3C/svg%3E'">
-                            </div>
+                        <div class="cart-item-image">
+                            <img src="<?= htmlspecialchars($p['img']) ?>" alt="<?= htmlspecialchars($p['name']) ?>">
+                        </div>
                             <div class="cart-item-details">
                                 <h3 class="cart-item-name"><?= htmlspecialchars($p['name']) ?></h3>
                                 <p class="cart-item-description"><?= htmlspecialchars($p['desc']) ?></p>
@@ -136,8 +140,7 @@ $pageCss = 'cart.css';
                                 <div class="subtotal-amount">€<?= number_format($item['subtotal'], 2, ',', '.') ?></div>
                             </div>
                             <div class="cart-item-remove">
-                                <button type="submit" name="remove" value="1" class="btn-remove"
-                                        onclick="this.form.elements['id'].value=<?= $p['id'] ?>">×</button>
+                               <button type="submit" name="remove" value="<?= (int)$p['id'] ?>" class="btn-remove">×</button>
                             </div>
                         </div>
                         <?php endforeach; ?>

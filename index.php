@@ -41,7 +41,7 @@ $categories = getCategories();
     <div class="alert-success"><?= $msg ?></div>
     <?php endif; ?>
 
-    <!-- Welcome/Login banner -->
+    <!-- banner di benvenuto -->
     <?php if (isLoggedIn()): ?>
     <div class="welcome-banner">
         <div class="container">
@@ -66,7 +66,7 @@ $categories = getCategories();
     </div>
     <?php endif; ?>
 
-    <!-- Category Filter -->
+    <!-- Filtro delle categorie -->
     <section class="category-section">
         <div class="container">
             <div class="category-filter">
@@ -84,7 +84,7 @@ $categories = getCategories();
         </div>
     </section>
 
-    <!-- Products -->
+    <!-- Prodotti -->
     <section class="products-section">
         <div class="container">
             <div class="products-grid">

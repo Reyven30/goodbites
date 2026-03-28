@@ -1,5 +1,8 @@
 <?php
-$conn = new mysqli("localhost", "flores", "vWy7Xr7kvdpp", "my_flores");
+//$conn = new mysqli("localhost", "flores", "vWy7Xr7kvdpp", "my_flores");
+$conn = new mysqli("localhost", "root", "", "goodbites");
+
+
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
