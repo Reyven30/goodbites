@@ -6,6 +6,7 @@ session_start();
 require_once 'includes/auth_functions.php';
 require_once 'includes/cart_functions.php';
 require_once 'data/products.php';
+require_once 'data/orders.php';
 
 // Gestione azioni carrello
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,21 +19,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['clear'])) {
         clearCart();
         $msg = "Carrello svuotato!";
-    } elseif (isset($_POST['confirm']) && isLoggedIn()) {
-        // Salva dati ordine
-        $_SESSION['order'] = [
-            'name' => $_SESSION['user_name'],
-            'email' => $_SESSION['user_email'],
-            'items' => getCartItems(),
-            'total' => getCartTotal(),
-            'number' => 'GB-' . date('Ymd') . '-' . rand(1000, 9999),
-            'date' => date('d/m/Y H:i')
-        ];
-        // Invia email di conferma
-        sendOrderEmail($_SESSION['order']);
-        clearCart();
-        header('Location: order-confirmed.php');
-        exit;
+    } } elseif (isset($_POST['confirm']) && isLoggedIn()) {
+    $items = getCartItems();
+    $total = getCartTotal();
+
+    if (empty($items) || $total <= 0) {
+        $msg = "Carrello vuoto o totale non valido.";
+    } else {
+        // Adatta struttura carrello al formato richiesto da createOrder()
+        $cartItemsForDb = [];
+        foreach ($items as $item) {
+            $p = $item['product'];
+            $cartItemsForDb[] = [
+                'id' => (int)$p['id'],
+                'name' => $p['name'],
+                'price' => (float)$p['price'],
+                'qty' => (int)$item['qty']
+            ];
+        }
+
+        $orderId = createOrder((int)$_SESSION['user_id'], $cartItemsForDb, (float)$total);
+
+        if ($orderId) {
+            // Manteniamo session order solo per la pagina di conferma/email
+            $_SESSION['order'] = [
+                'id' => $orderId,
+                'name' => $_SESSION['user_name'],
+                'email' => $_SESSION['user_email'],
+                'items' => $items,
+                'total' => $total,
+                'number' => 'GB-' . str_pad($orderId, 6, '0', STR_PAD_LEFT),
+                'date' => date('d/m/Y H:i')
+            ];
+
+            sendOrderEmail($_SESSION['order']);
+            clearCart();
+            header('Location: order-confirmed.php');
+            exit;
+        } else {
+            $msg = "Errore durante il salvataggio ordine nel database.";
+        }
     }
 }
 
